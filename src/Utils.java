@@ -1,15 +1,17 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Utils {
 
-    public static String randomWord = DB.getRandomWord();
+    public static final String randomWord = DB.getRandomWord();
 
     public static String getUnderLinedText(String text) {
         return String.format("<HTML><U>%s</U></HTML>", text);
@@ -51,7 +53,7 @@ public class Utils {
                 </head>""";
     }
 
-    public static String  getEntryHtml(Entry entry) {
+    public static String getEntryHtml(Entry entry) {
         StringBuilder builder = new StringBuilder();
         builder.append(getBoldedHtmlText(entry.getWord()));
         builder.append(getHtmlText(getPartOfSpeech(entry.getPartOfSpeech())));
@@ -152,9 +154,13 @@ public class Utils {
     }
 
     public static void setImage(JFrame jFrame) {
-        String path = "resources/fld_floating_dictionary.png";
-        Image image = Toolkit.getDefaultToolkit().getImage(path);
-        jFrame.setIconImage(image);
+        try {
+            String path = "/resources/fld_floating_dictionary.png";
+            Image image = ImageIO.read(Objects.requireNonNull(Utils.class.getResource(path)));
+            jFrame.setIconImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void setAttributes(JFrame jFrame) {
@@ -163,46 +169,5 @@ public class Utils {
         jFrame.setLocationRelativeTo(null);
         jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setImage(jFrame);
-    }
-
-    public static String getEntriesString(ArrayList<Entry> entries) {
-        StringBuilder attributes = new StringBuilder();
-        entries.forEach(entry -> {
-            attributes.append(entry.getWord()).append(".").append(getPartOfSpeech(entry.getPartOfSpeech())).append(".");
-
-            if (entry.getPlural() != null) attributes.append(entry.getPlural()).append(".");
-            if (entry.getTenses() != null) attributes.append(entry.getTenses()).append(".");
-            if (entry.getCompare() != null) attributes.append(entry.getCompare()).append(".");
-            attributes.append(".definition.");
-
-            for (String definition : entry.getDefinitions())
-                attributes.append(definition).append(".");
-
-            if (!entry.getSynonyms().isEmpty()) {
-                attributes.append("synonyms.");
-                entry.getSynonyms().forEach(synonym -> attributes.append(synonym).append("."));
-            }
-
-            if (!entry.getAntonyms().isEmpty()) {
-                attributes.append("antonyms.");
-                entry.getAntonyms().forEach(antonym -> attributes.append(antonym).append("."));
-            }
-
-            if (!entry.getHypernyms().isEmpty()) {
-                attributes.append("hypernyms.");
-                entry.getHypernyms().forEach(hypernym -> attributes.append(hypernym).append("."));
-            }
-
-            if (!entry.getHyponyms().isEmpty()) {
-                attributes.append("hyponyms.");
-                entry.getHyponyms().forEach(hyponym -> attributes.append(hyponym).append("."));
-            }
-
-            if (!entry.getHomophones().isEmpty()) {
-                attributes.append("homophones.");
-                entry.getHomophones().forEach(homophone -> attributes.append(homophone).append("."));
-            }
-        });
-        return attributes.toString();
     }
 }
