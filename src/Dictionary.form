@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Dictionary">
+  <grid id="27dc6" binding="dictionaryPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="5" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="20" y="20" width="600" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-1"/>
+      <foreground color="-1"/>
+      <minimumSize width="600" height="400"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="f6019" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="2" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="e403" class="javax.swing.JButton" binding="buttonSearch">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false">
+                <minimum-size width="100" height="50"/>
+                <preferred-size width="100" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-5171"/>
+              <borderPainted value="true"/>
+              <enabled value="true"/>
+              <focusPainted value="false"/>
+              <font name="JetBrains Mono" size="16"/>
+              <foreground color="-8955070"/>
+              <text value="Search"/>
+            </properties>
+          </component>
+          <component id="3fa7c" class="javax.swing.JComboBox" binding="searchBox">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="450" height="50"/>
+                <preferred-size width="-1" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-5171"/>
+              <editable value="true"/>
+              <enabled value="true"/>
+              <font name="JetBrains Mono" size="24"/>
+              <foreground color="-8955070"/>
+              <inheritsPopupMenu value="true"/>
+              <maximumRowCount value="10"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="bff3d" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="f9508" class="javax.swing.JButton" binding="buttonPrevious">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="120" height="50"/>
+                <preferred-size width="120" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-5171"/>
+              <borderPainted value="true"/>
+              <focusPainted value="false"/>
+              <font name="JetBrains Mono" size="18"/>
+              <foreground color="-8955070"/>
+              <text value="&lt;"/>
+            </properties>
+          </component>
+          <component id="fab87" class="javax.swing.JButton" binding="buttonNext">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="120" height="50"/>
+                <preferred-size width="120" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-5171"/>
+              <borderPainted value="true"/>
+              <focusPainted value="false"/>
+              <font name="JetBrains Mono" size="18"/>
+              <foreground color="-8955070"/>
+              <text value="&gt;"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="d51a3" class="javax.swing.JButton" binding="buttonRandom">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="120" height="50"/>
+            <preferred-size width="120" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-5171"/>
+          <borderPainted value="true"/>
+          <focusPainted value="false"/>
+          <font name="JetBrains Mono" size="16"/>
+          <foreground color="-8955070"/>
+          <text value="Random"/>
+        </properties>
+      </component>
+      <grid id="6ed09" binding="cardPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="120" height="50"/>
+            <preferred-size width="120" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+          <font name="Arial"/>
+          <foreground color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>
