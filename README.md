@@ -20,3 +20,7 @@ FLD Floating Dictionary for Windows features a database of over one million word
 * Avoid making spelling and grammar mistakes
 
 **Overall, FLD Floating Dictionary for Windows is a powerful and versatile dictionary app that can help you improve your vocabulary, language skills, and writing ability. It's also a great tool for students, professionals, and anyone else who needs a reliable dictionary on their Windows computer.**
+
+<img width="700" alt="Screenshot 2023-11-04 160340" src="https://github.com/Ahmadu-Suleiman/FLD-Floating-Dictionary-Window-Version/assets/81268745/6c99672f-b637-475a-bff1-278d411693f0">
+<img width="741" alt="Screenshot 2023-11-04 160434" src="https://github.com/Ahmadu-Suleiman/FLD-Floating-Dictionary-Window-Version/assets/81268745/5fb0296c-a3ad-4948-8a73-f91c94f8eb3f">
+
