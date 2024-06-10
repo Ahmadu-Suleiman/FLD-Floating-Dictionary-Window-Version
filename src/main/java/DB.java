@@ -5,7 +5,8 @@ import java.util.stream.Collectors;
 
 public class DB {
     private static Connection getConnection() throws SQLException {
-        String path = "jdbc:sqlite::resource:WiktionaryDatabase.db";
+//        String path = "jdbc:sqlite::resource:WiktionaryDatabase.db";
+        String path  = "jdbc:sqlite:resources/WiktionaryDatabase.db";
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
