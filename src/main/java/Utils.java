@@ -155,7 +155,7 @@ public class Utils {
 
     public static void setImage(JFrame jFrame) {
         try {
-            String path = "/resources/fld_floating_dictionary.png";
+            String path = "/fld_floating_dictionary.png";
             Image image = ImageIO.read(Objects.requireNonNull(Utils.class.getResource(path)));
             jFrame.setIconImage(image);
         } catch (Exception e) {
