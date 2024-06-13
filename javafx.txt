@@ -1,0 +1,1 @@
+jpackage --name FLD-Floating-Dictionary-Window-Version --input . --main-jar out/artifacts/FLD_Floating_Dictionary_Window_Version/FLD_Floating_Dictionary_Window_Version.jar --main-class Main.java

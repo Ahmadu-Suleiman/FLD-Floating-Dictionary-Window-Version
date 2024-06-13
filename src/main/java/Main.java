@@ -11,7 +11,7 @@ public class Main extends JFrame {
     private JLabel labelRandomWord;
 
     public Main() {
-        buttonActivate.addActionListener(e -> Dictionary.launchDictionary(DB.getRandomWord()));
+        buttonActivate.addActionListener(_ -> DB.getRandomWord().thenAccept(Dictionary::launchDictionary));
         labelRandomWord.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         labelRandomWord.setText(Utils.getUnderLinedText(Utils.randomWord));
 

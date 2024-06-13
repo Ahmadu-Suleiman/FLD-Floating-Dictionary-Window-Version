@@ -1,5 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,7 +13,9 @@ import java.util.Objects;
 
 public class Utils {
 
-    public static final String randomWord = DB.getRandomWord();
+    public static final Logger logger = LoggerFactory.getLogger(Utils.class);
+
+    public static final String randomWord = DB.getRandomWord().join();
 
     public static String getUnderLinedText(String text) {
         return String.format("<HTML><U>%s</U></HTML>", text);
@@ -58,12 +62,9 @@ public class Utils {
         builder.append(getBoldedHtmlText(entry.getWord()));
         builder.append(getHtmlText(getPartOfSpeech(entry.getPartOfSpeech())));
 
-        if (entry.getCompare() != null)
-            builder.append(getHtmlText(entry.getCompare()));
-        if (entry.getPlural() != null)
-            builder.append(getHtmlText(entry.getPlural()));
-        if (entry.getTenses() != null)
-            builder.append(getHtmlText(entry.getTenses()));
+        if (entry.getCompare() != null) builder.append(getHtmlText(entry.getCompare()));
+        if (entry.getPlural() != null) builder.append(getHtmlText(entry.getPlural()));
+        if (entry.getTenses() != null) builder.append(getHtmlText(entry.getTenses()));
 
         builder.append(getHtmlText("Definition"));
         builder.append(getHtmlListDefinition(entry.getDefinitions()));
@@ -149,7 +150,7 @@ public class Utils {
             Desktop desktop = Desktop.getDesktop();
             desktop.browse(URI.create(url));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 
@@ -159,7 +160,7 @@ public class Utils {
             Image image = ImageIO.read(Objects.requireNonNull(Utils.class.getResource(path)));
             jFrame.setIconImage(image);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
     }
 

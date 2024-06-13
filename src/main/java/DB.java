@@ -1,107 +1,131 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class DB {
     private static Connection getConnection() throws SQLException {
         String path = "jdbc:sqlite::resource:WiktionaryDatabase.db";
-//        String path  = "jdbc:sqlite:resources/WiktionaryDatabase.db";
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            Utils.logger.error(e.toString());
         }
 
         return DriverManager.getConnection(path);
     }
 
-    public static String[] getSimilarEntryWords(String word) {
-        ArrayList<String> similarWords = new ArrayList<>(10);
-        String sql = "SELECT entry_word FROM entry_words WHERE entry_word LIKE ? LIMIT 9";
+    public static CompletableFuture<String[]> getSimilarEntryWords(String word) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<String> similarWords = new ArrayList<>();
+            String sql = "SELECT entry_word FROM entry_words WHERE entry_word LIKE? LIMIT 9";
 
-        try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, word + "%");
-            ResultSet resultSet = statement.executeQuery();
+            try (Connection connection = getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, word + "%");
+                ResultSet resultSet = statement.executeQuery();
 
-            similarWords.add(word);
-            do similarWords.add(resultSet.getString("entry_word")); while (resultSet.next());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                similarWords.add(word);
+                while (resultSet.next()) {
+                    similarWords.add(resultSet.getString("entry_word"));
+                }
+            } catch (SQLException e) {
+                Utils.logger.error(e.toString());
+            }
 
-        return similarWords.stream().distinct().toArray((String[]::new));
+            return similarWords.stream().distinct().toArray(String[]::new);
+        });
     }
 
-    public static boolean wordExist(String word) {
-        String sql = "SELECT (COUNT(*) > 0) AS found FROM entry_words WHERE entry_word = ?";
+    public static CompletableFuture<Boolean> wordExist(String word) {
+        return CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT (COUNT(*) > 0) AS found FROM entry_words WHERE entry_word =?";
 
-        try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, word);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.getBoolean("found");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+            try (Connection connection = getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, word);
+                ResultSet resultSet = statement.executeQuery();
+                return resultSet.getBoolean("found");
+            } catch (SQLException e) {
+                Utils.logger.error(e.toString());
+                return false;
+            }
+        });
     }
 
-    public static String getRandomWord() {
-        String sql = "SELECT entry_word FROM entry_words ORDER BY random() LIMIT 1";
+    public static CompletableFuture<String> getRandomWord() {
+        return CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT entry_word FROM entry_words ORDER BY random() LIMIT 1";
 
-        try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.getString("entry_word");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "A";
+            try (Connection connection = getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return resultSet.getString("entry_word");
+                }
+            } catch (SQLException e) {
+                Utils.logger.error("Error occurred while fetching random word", e);
+            }
+            return "A"; // Default value in case of failure
+        });
     }
 
-    private static ArrayList<String> getPreviousWords(String word) {
-        ArrayList<String> previousWords = new ArrayList<>(20);
-        String sql = "SELECT entry_word FROM entry_words WHERE entry_word < ? ORDER BY entry_word DESC LIMIT 20";
+    public static CompletableFuture<ArrayList<String>> getPreviousWords(String word) {
+        return CompletableFuture.supplyAsync(() -> {
+            ArrayList<String> previousWords = new ArrayList<>(20);
+            String sql = "SELECT entry_word FROM entry_words WHERE entry_word <? ORDER BY entry_word DESC LIMIT 20";
 
-        try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, word);
+            try (Connection connection = getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, word);
 
-            ResultSet resultSet = statement.executeQuery();
-            do previousWords.add(resultSet.getString("entry_word")); while (resultSet.next());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return previousWords;
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    previousWords.add(resultSet.getString("entry_word"));
+                }
+            } catch (SQLException e) {
+                Utils.logger.error("Error occurred while fetching previous words", e);
+            }
+            return previousWords;
+        });
     }
 
-    private static ArrayList<String> getNextWords(String word) {
-        ArrayList<String> nextWords = new ArrayList<>(20);
-        String sql = "SELECT entry_word FROM entry_words WHERE entry_word > ? ORDER BY entry_word ASC LIMIT 20";
+    public static CompletableFuture<ArrayList<String>> getNextWords(String word) {
+        return CompletableFuture.supplyAsync(() -> {
+            ArrayList<String> nextWords = new ArrayList<>(20);
+            String sql = "SELECT entry_word FROM entry_words WHERE entry_word >? ORDER BY entry_word ASC LIMIT 20";
 
-        try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, word);
+            try (Connection connection = getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, word);
 
-            ResultSet resultSet = statement.executeQuery();
-            do nextWords.add(resultSet.getString("entry_word")); while (resultSet.next());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return nextWords;
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    nextWords.add(resultSet.getString("entry_word"));
+                }
+            } catch (SQLException e) {
+                Utils.logger.error("Error occurred while fetching next words", e);
+            }
+            return nextWords;
+        });
     }
 
-    public static ArrayList<String> getEntryWords(String word) {
-        ArrayList<String> words = new ArrayList<>();
-        if (wordExist(word)) {
-            words.addAll(getPreviousWords(word));
-            words.add(word);
-            words.addAll(getNextWords(word));
-            words.sort(String::compareToIgnoreCase);
-        }
-        return words;
+    public static CompletableFuture<ArrayList<String>> getEntryWords(String word) {
+        return wordExist(word)
+                .thenCompose(exists -> {
+                    if (exists) {
+                        return getPreviousWords(word)
+                                .thenCombine(getNextWords(word), (prevWords, nextWords) -> {
+                                    prevWords.add(word);
+                                    prevWords.addAll(nextWords);
+                                    prevWords.sort(String::compareToIgnoreCase);
+                                    return prevWords;
+                                });
+                    } else {
+                        return CompletableFuture.completedFuture(new ArrayList<>());
+                    }
+                });
     }
 
     public static ArrayList<Entry> getAllEntriesForWord(String word) {
@@ -123,7 +147,7 @@ public class DB {
 
             do entries.add(getEntry(resultSet)); while (resultSet.next());
         } catch (SQLException e) {
-            e.printStackTrace();
+            Utils.logger.error(e.toString());
         }
         return entries;
     }
@@ -139,7 +163,7 @@ public class DB {
 
             do entries.add(getEntry(resultSet)); while (resultSet.next());
         } catch (SQLException e) {
-            e.printStackTrace();
+            Utils.logger.error(e.toString());
         }
         return entries;
     }

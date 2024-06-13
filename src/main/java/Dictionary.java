@@ -5,7 +5,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Dictionary extends JFrame {
     private final CardLayout cardLayout;
@@ -44,11 +43,13 @@ public class Dictionary extends JFrame {
 
         if (word != null) setEntries(word);
         else setEntries(Utils.randomWord);
-        buttonPrevious.addActionListener(e -> cardLayout.previous(cardPanel));
-        buttonNext.addActionListener(e -> cardLayout.next(cardPanel));
+        buttonPrevious.addActionListener(_ -> cardLayout.previous(cardPanel));
+        buttonNext.addActionListener(_ -> cardLayout.next(cardPanel));
 
-        buttonSearch.addActionListener(e -> setEntries((String) searchBox.getEditor().getItem()));
-        buttonRandom.addActionListener(e -> setEntries(DB.getRandomWord()));
+        buttonSearch.addActionListener(_ -> setEntries((String) searchBox.getEditor().getItem()));
+        buttonRandom.addActionListener(_ -> {
+            DB.getRandomWord().thenAccept(this::setEntries);
+        });
     }
 
     public static void launchDictionary(String word) {
@@ -67,24 +68,27 @@ public class Dictionary extends JFrame {
     }
 
     private void setEntries(String text) {
-        if (DB.wordExist(text)) {
-            ArrayList<String> entryWords = DB.getEntryWords(text);
-            cardPanel.removeAll();
+        DB.wordExist(text).thenAccept(exists -> {
+            if (exists) {
+                DB.getEntryWords(text).thenAccept(entryWords -> {
+                    cardPanel.removeAll();
 
-            for (String word : entryWords) {
-                String entries = Utils.getEntriesHtml(DB.getAllEntriesForWord(word));
-                JTextPane textPane = new JTextPane();
-                textPane.setContentType("text/html");
-                textPane.setText(entries);
-                textPane.setEditable(false);
+                    for (String word : entryWords) {
+                        String entries = Utils.getEntriesHtml(DB.getAllEntriesForWord(word));
+                        JTextPane textPane = new JTextPane();
+                        textPane.setContentType("text/html");
+                        textPane.setText(entries);
+                        textPane.setEditable(false);
 
-                JScrollPane scrollPane = new JScrollPane(textPane);
-                scrollPane.setName(word);
-                customizeScrollPane(scrollPane);
-                cardPanel.add(scrollPane, word);
+                        JScrollPane scrollPane = new JScrollPane(textPane);
+                        scrollPane.setName(word);
+                        customizeScrollPane(scrollPane);
+                        cardPanel.add(scrollPane, word);
+                    }
+                    cardLayout.show(cardPanel, text);
+                });
             }
-            cardLayout.show(cardPanel, text);
-        }
+        });
     }
 
     private void customizeScrollPane(JScrollPane scrollPane) {
@@ -109,9 +113,11 @@ public class Dictionary extends JFrame {
     private void populateAndShowPopUp() {
         SwingUtilities.invokeLater(() -> {
             String query = (String) searchBox.getEditor().getItem();
-            DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(DB.getSimilarEntryWords(query));
-            searchBox.setModel(boxModel);
-            searchBox.showPopup();
+            DB.getSimilarEntryWords(query).thenAccept(similarWords -> {
+                DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(similarWords);
+                searchBox.setModel(boxModel);
+                searchBox.showPopup();
+            });
         });
     }
 }
