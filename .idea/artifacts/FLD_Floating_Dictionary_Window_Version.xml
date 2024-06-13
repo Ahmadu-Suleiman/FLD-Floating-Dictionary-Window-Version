@@ -1,0 +1,26 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="FLD-Floating-Dictionary-Window-Version">
+    <output-path>$PROJECT_DIR$/out/artifacts/FLD_Floating_Dictionary_Window_Version</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="Main" />
+        <option name="description" value="This is the desktop version for the FLD Floating Dictionary android application" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="linuxIcon" value="$PROJECT_DIR$/src/main/resources/fld_floating_dictionary.png" />
+            <option name="windowsIcon" value="$PROJECT_DIR$/src/main/resources/fld_floating_dictionary.ico" />
+          </JavaFxApplicationIcons>
+        </option>
+        <option name="title" value="FLD Floating Dictionary" />
+        <option name="vendor" value="Ahmad Suleiman" />
+        <option name="version" value="1.1" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="FLD_Floating_Dictionary_Window_Version.jar">
+        <element id="module-output" name="FLD-Floating-Dictionary-Window-Version" />
+      </element>
+    </root>
+  </artifact>
+</component>
