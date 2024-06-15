@@ -128,7 +128,7 @@ public class DB {
                 });
     }
 
-    public static ArrayList<Entry> getAllEntryWordsForWord(String word) {
+    public static ArrayList<Entry> getAllEntriesForWord(String word) {
         ArrayList<Entry> entries = new ArrayList<>();
 
         if (word.compareToIgnoreCase("M") >= 0) entries.addAll(getAllEntriesForWordGreaterThanL(word));

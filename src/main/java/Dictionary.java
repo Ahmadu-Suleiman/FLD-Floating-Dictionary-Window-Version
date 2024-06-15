@@ -74,7 +74,7 @@ public class Dictionary extends JFrame {
                     cardPanel.removeAll();
 
                     for (String word : entryWords) {
-                        String entries = Utils.getEntriesHtml(DB.getAllEntryWordsForWord(word));
+                        String entries = Utils.getEntriesHtml(DB.getAllEntriesForWord(word));
                         JTextPane textPane = new JTextPane();
                         textPane.setContentType("text/html");
                         textPane.setText(entries);
