@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FLD-Floating-Dictionary-Window-Version.iml" filepath="$PROJECT_DIR$/FLD-Floating-Dictionary-Window-Version.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fld-floating-dictionary-window-version.iml" filepath="$PROJECT_DIR$/fld-floating-dictionary-window-version.iml" />
     </modules>
   </component>
 </project>
