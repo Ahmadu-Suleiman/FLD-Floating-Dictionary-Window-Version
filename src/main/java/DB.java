@@ -71,9 +71,9 @@ public class DB {
         });
     }
 
-    public static CompletableFuture<ArrayList<String>> getPreviousWords(String word) {
+    public static CompletableFuture<ArrayList<String>> getPrecedingWords(String word) {
         return CompletableFuture.supplyAsync(() -> {
-            ArrayList<String> previousWords = new ArrayList<>(20);
+            ArrayList<String> precedingWords = new ArrayList<>(20);
             String sql = "SELECT entry_word FROM entry_words WHERE entry_word <? ORDER BY entry_word DESC LIMIT 20";
 
             try (Connection connection = getConnection()) {
@@ -82,18 +82,18 @@ public class DB {
 
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
-                    previousWords.add(resultSet.getString("entry_word"));
+                    precedingWords.add(resultSet.getString("entry_word"));
                 }
             } catch (SQLException e) {
                 Utils.logger.error("Error occurred while fetching previous words", e);
             }
-            return previousWords;
+            return precedingWords;
         });
     }
 
-    public static CompletableFuture<ArrayList<String>> getNextWords(String word) {
+    public static CompletableFuture<ArrayList<String>> getSucceedingWords(String word) {
         return CompletableFuture.supplyAsync(() -> {
-            ArrayList<String> nextWords = new ArrayList<>(20);
+            ArrayList<String> succeedingWords = new ArrayList<>(20);
             String sql = "SELECT entry_word FROM entry_words WHERE entry_word >? ORDER BY entry_word ASC LIMIT 20";
 
             try (Connection connection = getConnection()) {
@@ -102,12 +102,12 @@ public class DB {
 
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
-                    nextWords.add(resultSet.getString("entry_word"));
+                    succeedingWords.add(resultSet.getString("entry_word"));
                 }
             } catch (SQLException e) {
                 Utils.logger.error("Error occurred while fetching next words", e);
             }
-            return nextWords;
+            return succeedingWords;
         });
     }
 
@@ -115,8 +115,8 @@ public class DB {
         return wordExist(word)
                 .thenCompose(exists -> {
                     if (exists) {
-                        return getPreviousWords(word)
-                                .thenCombine(getNextWords(word), (prevWords, nextWords) -> {
+                        return getPrecedingWords(word)
+                                .thenCombine(getSucceedingWords(word), (prevWords, nextWords) -> {
                                     prevWords.add(word);
                                     prevWords.addAll(nextWords);
                                     prevWords.sort(String::compareToIgnoreCase);
